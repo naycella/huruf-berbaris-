@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jom Mengaji: Kuiz Iqra' Tahap 1-3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #FFC107;
+            --danger: #FF5722;
+            --bg: #E3F2FD;
+        }
+
+        body {
+            font-family: 'Fredoka One', cursive;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            border: 5px solid var(--primary);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .word-display {
+            font-family: 'Amiri', serif;
+            font-size: 5rem;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            direction: rtl;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .option-btn {
+            background: var(--secondary);
+            color: #5D4037;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+        }
+
+        #feedback {
+            height: 30px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .hidden { display: none; }
+
+        /* Animasi */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .correct { color: var(--primary); animation: bounce 0.5s; }
+        .wrong { color: var(--danger); }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="start-screen">
+        <h1>📖 Jom Iqra'!</h1>
+        <p>Mari belajar baris Fathah, Kasrah & Dhommah</p>
+        <button onclick="startGame()" style="background: var(--primary); color: white;">MULA MAIN</button>
+    </div>
+
+    <div id="quiz-screen" class="hidden">
+        <div class="stats">
+            <span>⭐ Markah: <span id="score">0</span></span>
+            <span>❤️ Nyawa: <span id="lives">3</span></span>
+        </div>
+        <div id="level-indicator">Tahap 1</div>
+        <div class="word-display" id="word-box">بَ</div>
+        <div class="options-grid" id="options">
+            </div>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+        <h1 id="end-title">Permainan Tamat!</h1>
+        <p>Markah Akhir: <span id="final-score">0</span></p>
+        <button onclick="location.reload()" style="background: var(--primary); color: white;">CUBA LAGI</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // Tahap 1: Huruf Tunggal
+        { q: "بَ", a: "Ba", options: ["Ba", "Bi", "Bu", "Ta"], level: 1 },
+        { q: "تِ", a: "Ti", options: ["Ta", "Ti", "Tu", "Ji"], level: 1 },
+        { q: "جُ", a: "Ju", options: ["Ja", "Ji", "Ju", "Bu"], level: 1 },
+        { q: "سَ", a: "Sa", options: ["Sa", "Si", "Su", "Ra"], level: 1 },
+        { q: "دِ", a: "Di", options: ["Da", "Di", "Du", "Li"], level: 1 },
+        { q: "قُ", a: "Qu", options: ["Qa", "Qi", "Qu", "Ka"], level: 1 },
+        
+        // Tahap 2: 2 Huruf Bersambung
+        { q: "بَتَ", a: "Ba-Ta", options: ["Ba-Ta", "Ba-Ti", "Bu-Tu", "Ta-Ba"], level: 2 },
+        { q: "سِجِ", a: "Si-Ji", options: ["Sa-Ja", "Si-Ji", "Su-Ju", "Si-Ti"], level: 2 },
+        { q: "قُمُ", a: "Qu-Mu", options: ["Qa-Ma", "Qi-Mi", "Qu-Mu", "Ka-Mu"], level: 2 },
+        { q: "يَدَ", a: "Ya-Da", options: ["Ya-Da", "Yi-Di", "Yu-Du", "Ba-Da"], level: 2 },
+        { q: "نَزِ", a: "Na-Zi", options: ["Na-Za", "Na-Zi", "Nu-Zu", "Ma-Zi"], level: 2 },
+        { q: "لُبِ", a: "Lu-Bi", options: ["La-Ba", "Li-Bi", "Lu-Bi", "Lu-Bu"], level: 2 },
+
+        // Tahap 3: 3 Huruf Bersambung
+        { q: "كَتَبَ", a: "Ka-Ta-Ba", options: ["Ka-Ta-
